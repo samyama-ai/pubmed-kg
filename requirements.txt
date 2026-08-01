@@ -1,0 +1,12 @@
+# Runtime dependencies for the PubMed KG ETL scripts.
+#
+# There are NONE: etl/download_pubmed.py and etl/parse_pubmed_xml.py use only the
+# Python standard library (argparse, urllib, gzip, xml, ...). You do not need to
+# `pip install` anything to run them — just Python >= 3.10:
+#
+#     python etl/download_pubmed.py --help
+#     python etl/parse_pubmed_xml.py --help
+#
+# The actual graph load (66M nodes / 1.04B edges) is done by a Rust loader in the
+# samyama-graph engine (`cargo run --release --example pubmed_loader`), not by pip.
+# See GETTING_STARTED.md.

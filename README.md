@@ -35,6 +35,16 @@ ORDER BY articles DESC LIMIT 5
 
 ---
 
+## Documentation
+
+New here? Start with the guides:
+
+| Guide | What it covers |
+|-------|----------------|
+| **[GETTING_STARTED.md](GETTING_STARTED.md)** | prerequisites (Python ≥ 3.10) · run the engine (Docker) · load the graph · first query · the scale caveats |
+| **[docs/QUERYING.md](docs/QUERYING.md)** | ask questions via the **HTTP API** or the **Samyama CLI** |
+| [Biomedical Benchmark](https://samyama-ai.github.io/samyama-graph-book/biomedical_benchmark.html) | 100 example queries |
+
 ## Schema
 
 **6 node labels** -- Article (37M), Author (30M), MeSHTerm (30K), Chemical (500K), Journal (30K), Grant (1M)
@@ -45,29 +55,31 @@ ORDER BY articles DESC LIMIT 5
 
 ## Quick Start
 
+**Full walkthrough → [GETTING_STARTED.md](GETTING_STARTED.md)** (prerequisites, Docker, the scale caveats).
+This is a **billion-edge** graph — importing it needs a large machine, not a laptop.
+
 ### Load from snapshot (recommended)
 
-```bash
-# Download snapshot from release
-curl -LO https://github.com/samyama-ai/samyama-graph/releases/download/kg-snapshots-v5/pubmed.sgsnap
+Needs **Docker** for the engine (and a lot of RAM/disk for this snapshot):
 
-# Start Samyama and import
-./target/release/samyama
-curl -X POST http://localhost:8080/api/tenants \
-  -H 'Content-Type: application/json' \
-  -d '{"id":"pubmed","name":"PubMed KG"}'
-curl -X POST http://localhost:8080/api/tenants/pubmed/snapshot/import \
-  -F "file=@pubmed.sgsnap"
+```bash
+docker run --rm -p 8080:8080 -p 6379:6379 public.ecr.aws/f9f6l5u4/samyama-graph:1.1.0
+
+curl -LO https://github.com/samyama-ai/samyama-graph/releases/download/kg-snapshots-v5/pubmed.sgsnap
+curl -X POST http://localhost:8080/api/tenants -H 'Content-Type: application/json' -d '{"id":"pubmed","name":"PubMed KG"}'
+curl -X POST http://localhost:8080/api/tenants/pubmed/snapshot/import -F "file=@pubmed.sgsnap"
 ```
 
-### Build from source (requires AWS -- 101 GB download)
+### Build from source (AWS-scale — 101 GB download + Rust loader)
+
+The Python ETL scripts are **standard-library only — no `pip install` needed** (Python ≥ 3.10). The graph
+load itself is a Rust example in the `samyama-graph` engine:
 
 ```bash
 git clone https://github.com/samyama-ai/pubmed-kg.git && cd pubmed-kg
-pip install -e .
-python etl/download_pubmed.py --output-dir data/pubmed-raw    # 101 GB
+python etl/download_pubmed.py --output-dir data/pubmed-raw    # ~101 GB (try --max-files 1 first)
 python etl/parse_pubmed_xml.py data/pubmed-raw/ --output-dir data/pubmed
-cargo run --release --example pubmed_loader -- --data-dir data/pubmed
+cargo run --release --example pubmed_loader -- --data-dir data/pubmed   # from the samyama-graph repo
 ```
 
 ## Example Queries
