@@ -96,7 +96,9 @@ RETURN i.name, count(DISTINCT a) AS articles ORDER BY articles DESC LIMIT 10
 
 ## Part of the Biomedical Trifecta
 
-PubMed is the backbone of Samyama's billion-edge biomedical benchmark, federated with [Clinical Trials](https://github.com/samyama-ai/clinicaltrials-kg) (27M edges), [Pathways](https://github.com/samyama-ai/pathways-kg) (835K edges), and [Drug Interactions](https://github.com/samyama-ai/druginteractions-kg) (388K edges). Together: **74M nodes, 1 billion edges, 96/100 queries passing.**
+PubMed is the backbone of Samyama's billion-edge biomedical benchmark, merged on load with [Clinical Trials](https://github.com/samyama-ai/clinicaltrials-kg) (27M edges), [Pathways](https://github.com/samyama-ai/pathways-kg) (835K edges), and [Drug Interactions](https://github.com/samyama-ai/druginteractions-kg) (388K edges). Together: **74M nodes, 1 billion edges, 96/100 queries passing.**
+
+Each KG is built, versioned and licensed independently and any subset loads on its own; shared properties merge them on import with no alignment step. This is a merged graph, not a federation — there is no query-time federation, no remote endpoints and no distributed planner.
 
 ## Links
 
