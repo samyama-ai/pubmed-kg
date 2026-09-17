@@ -29,13 +29,12 @@ size_categories:
 
 ## Provenance and licence
 
-Apache 2.0
+Apache 2.0 covers the loader. The data is PubMed/MEDLINE from NLM, free to redistribute
+with the attribution *Courtesy of the U.S. National Library of Medicine* — except that the
+`Article` nodes carry **abstract text**, which is often copyrighted by the publisher rather
+than by NLM. Source-by-source terms, and that open question, are in
+[`DATA-LICENSES.md`](DATA-LICENSES.md).
 
-> ⚠️ **The licence above covers this repository's code, not the data.** This graph is
-> derived from an upstream source (PubMed/MEDLINE baseline from NLM (1,219 XML files, 101 GB compressed)), whose
-> own terms govern redistribution and are **not stated here**. Establish and record them
-> before redistributing or quoting this dataset. The frontmatter is therefore
-> `license: other` rather than `apache-2.0`.
 
 ## Reproducing
 
