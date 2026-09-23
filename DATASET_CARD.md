@@ -36,10 +36,47 @@ than by NLM. Source-by-source terms, and that open question, are in
 [`DATA-LICENSES.md`](DATA-LICENSES.md).
 
 
+## Freshness
+
+**Refresh cadence:** NLM publishes PubMed/MEDLINE as one annual **baseline** release
+(each December) plus daily incremental update files on its FTP server throughout the
+year. `etl/download_pubmed.py` pulls only from the baseline directory
+(`https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/`), listing whatever files are current
+at run time — it does not track the daily update files, so re-running the loader
+picks up the latest baseline release but nothing published since.
+
+**Data as of:** This repository ships the loader, not the graph — `data/` is empty
+and gitignored, no PubMed XML is vendored. So the graph's real age is bounded by
+whenever `etl/download_pubmed.py` is next run against NLM's live FTP, not by a
+committed snapshot date. The loader code was last changed 2026-03-23 (`git log --
+etl/download_pubmed.py`). The best evidence it was last run successfully end-to-end
+is README.md's biomedical-benchmark line, which reports a completed load (66.2M
+PubMed nodes feeding a 74M-node, 1-billion-edge merged graph) measured 2026-04-03.
+Separately, NLM's terms-of-use page (governing redistribution, not the data's
+vintage) was last checked 2026-09-18 per `DATA-LICENSES.md`.
+
 ## Reproducing
 
 The loader in this repository rebuilds the graph from the upstream source. See the
 README's Quick Start for the snapshot download and the from-source build.
+
+## Citation
+
+Please cite this repository if you use it. See [`CITATION.cff`](CITATION.cff) for
+machine-readable metadata (CFF 1.2.0).
+
+```bibtex
+@misc{pubmed_kg_2026,
+  title        = {pubmed-kg: PubMed Knowledge Graph for Samyama},
+  author       = {Samyama},
+  year         = {2026},
+  howpublished = {\url{https://git.samyama.ai/Samyama.ai/pubmed-kg}}
+}
+```
+
+**No DOI.** This release has not been deposited to Zenodo, so there is no DOI to
+cite. Getting one is open work — it requires a human to make the Zenodo deposit
+(KG-06).
 
 ## Known limitations
 
